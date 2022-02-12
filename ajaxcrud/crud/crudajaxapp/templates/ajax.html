@@ -1,0 +1,31 @@
+  <script>
+
+    $("#btnsave").click(function() {
+
+        let nm = $("#nameid").val();
+        let em = $("#emailid").val();
+        let pw = $("#passwordid").val();
+
+        console.log(nm);
+        if (nm == ""){
+          console.log("please enter name");
+        } else if (em == ""){
+          console.log("please enter email");
+        } else if (pw == ""){
+          console.log("please enter password");
+        }else{
+          console.log("AJAx RUNNING");
+          mydata = { name: nm, email: em, password: pw};
+                              console.log(mydata);
+          $.ajax({
+          url: "/save/",
+          method: "POST",
+          data: mydata,
+          success:function(data){
+          console.log(data)
+          },
+          });
+        }
+    });
+
+</script>

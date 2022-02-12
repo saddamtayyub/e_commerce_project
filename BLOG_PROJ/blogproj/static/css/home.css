@@ -1,0 +1,6 @@
+
+body  {
+        background-image: url("{% static 'images/bckg5.jpg' %}");
+        background-color: #f0eff4;
+              }
+

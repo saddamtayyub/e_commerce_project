@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU" crossorigin="anonymous">
+    {% load static %}
+    <title>BLOG PAGE</title>
+  </head>
+  <body>
+    <div class="container-sm" style="text-align:center; padding: 20px;">
+      <h1>BLOG APP</h1>
+      <h6>by SOURABH DEVLAL</h6>
+      <br>
+      <br>
+      {% if user.is_authenticated %}
+        <h1 style="  text-transform: uppercase;">Hello, {{user}}</h1>
+      {% else %}
+        <h1 style="  text-transform: uppercase;">Hello, {{user}}</h1>
+      {% endif %}
+<!--      search box form-->
+      <form class="d-flex" method="POST" action="{% url 'results_page' %}">
+        {% csrf_token %}
+        <input class="form-control me-2" type="search" placeholder="Search Blogs" aria-label="Search" name="searched">
+        <button type="submit" class="btn btn-outline-success">Search</button>
+      </form>
+    </div>
+    {% if user.is_authenticated %}
+      <a href="{% url 'logout' %}" style="padding: 5px; margin: 0 0 0 150px;"><button class="btn btn-danger"> LOGOUT </button></a>
+      <a href="{% url 'profile' %}" style="padding: 5px;"><button class="btn btn-danger"> MY BLOGS/PROFILE </button></a>
+
+
+      <div class="container-sm" style="text-align:center; padding: 20px;">
+        <div class="row justify-content-center">
+          {% for x in content %}
+            <div class="col-sm-4 ">
+              <a href="{% url 'single_blog' x.pk %}" class="text-dark" style="border:0; text-decoration:none; outline:none">
+
+                <div class="card " style="width: 18rem;">
+                  {% if x.post_image %}
+                    <img src="{{x.post_image.url}}" class="card-img-top rounded" alt="Blog Image">
+                  {% endif %}
+                  <div class="card-body">
+
+                    <h5 class="card-title">{{x.post_title}}</h5>
+                    <h6 class="card-subtitle mb-2 text-muted">Author : {{x.post_author}}</h6>
+                    <p class="card-text">{{ x.post_content|safe }}</p>
+                    <!--        for likes/dislikes and comments-->
+                    <form action="{% url 'like_post' x.pk %}" method="POST">
+                      {% csrf_token %}
+                      <button type="submit" name="post_id" value="{{ x.id }}" class="btn btn-primary btn-sm" id="like_btn" onclick="likeToggle()">LIKE</button> - {{x.total_likes}} likes
+                    </form>
+
+                  </div>
+                  <div class="card-footer text-muted text-center">
+                    <p>creation date :  {{x.creation_date}}</p>
+                  </div>
+                </div>
+
+              </a>
+            </div>
+
+          {% endfor %}
+        </div>
+      </div>
+
+
+
+    {% else %} <!--  WILL RUN WHEN THE USER IS NOT AUTHENTICATED   -->
+
+      <a href="{% url 'login' %}" style="padding: 5px; margin: 0 0 0 150px;"><button class="btn btn-danger"> LOGIN </button></a>
+
+      <div class="container-sm" style="text-align:center; padding: 20px;">
+        <div class="row justify-content-center">
+          {% for x in content %}
+            <div class="col-sm-4 ">
+              <a href="{% url 'login' %}" class="text-dark" style="border:0; text-decoration:none; outline:none">
+
+                <div class="card " style="width: 18rem;">
+                  {% if x.post_image %}
+                    <img src="{{x.post_image.url}}" class="card-img-top rounded" alt="Blog Image">
+                  {% endif %}
+                  <div class="card-body">
+
+                    <h5 class="card-title">{{x.post_title}}</h5>
+                    <h6 class="card-subtitle mb-2 text-muted">Author : {{x.post_author}}</h6>
+                    <p class="card-text">{{x.post_content|safe}}</p>
+
+                  </div>
+                  <div class="card-footer text-muted text-center">
+                    <p>creation date :  {{x.creation_date}}</p>
+                  </div>
+                </div>
+
+              </a>
+            </div>
+
+          {% endfor %}
+        </div>
+      </div>
+
+
+
+
+    {% endif %}
+
+
+
+
+    <script type="text/javascript" src="{% static 'js/social.js' %}"></script>
+    <!-- Optional JavaScript; choose one of the two! -->
+
+    <!-- Option 1: Bootstrap Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-/bQdsTh/da6pkI1MST/rWKFNjaCP5gBSY4sEBT38Q/9RBh9AH40zEOg7Hlq2THRZ" crossorigin="anonymous"></script>
+
+    <!-- Option 2: Separate Popper and Bootstrap JS -->
+    <!--
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js" integrity="sha384-W8fXfP3gkOKtndU4JGtKDvXbO53Wy8SZCQHczT5FMiiqmQfUpWbYdTil/SxwZgAN" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.min.js" integrity="sha384-skAcpIdS7UcVUC05LJ9Dxay8AXcDYfBJqt1CJ85S/CFujBsIzCIv+l9liuYLaMQ/" crossorigin="anonymous"></script>
+    -->
+  </body>
+</html>

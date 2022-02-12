@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+    <title>AJAX CRUD</title>
+  </head>
+  <body>
+    <h1 class="text-center alert alert-danger">User Data</h1>
+    <div class="row">
+      <div class=" col-sm-4 text-center">
+        <h4 class="text-center alert alert_info">Add/update</h4>
+        <form action="" method="POST">
+          {% csrf_token %}
+          {% for fm in form %}
+          {{fm.label_tag}} {{fm}} {{fm.errors|striptags}}
+          <br>
+          <br>
+          {% endfor %}
+          <input type="submit" id="btnsave" class="btn btn-success" value="ADD/UPDATE">
+        </form>
+      </div>
+      <div class=" col-sm-7 text-center">
+        <h4 class="text-center alert alert_info">Show Student Information</h4>
+        <table class="text-center">
+          <thead>
+          <tr>
+            <th scope="col">ID</th>
+            <th scope="col">NAME</th>
+            <th scope="col">EMAIL</th>
+            <th scope="col">PASSWORD</th>
+            <th scope="col">ACTION</th>
+          </tr>
+          </thead>
+          <tbody>
+              {% for dt in data %}
+              <tr>
+                <td>{{dt.id}}</td>
+                <td>{{dt.name}}</td>
+                <td>{{dt.email}}</td>
+                <td>{{dt.password}}</td>
+                <td><a href="/edit/{{ dt.id }}"><button class="btn btn-secondary" >Edit</button></a></td>
+                <td><a href="/edit/{{ dt.id }}"><button class="btn btn-primary" >Delete</button></a></td>
+              </tr>
+              {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Option 1: Bootstrap Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script>
+<!--    {% include "C:/Users/PC/Desktop/python proj/ajaxcrud/crud/crudajaxapp/templates/ajax.html" %}-->
+  <script>
+
+    $("#btnsave").click(function() {
+
+        let nm = $("#nameid").val();
+        let em = $("#emailid").val();
+        let pw = $("#passwordid").val();
+
+        if (nm == ""){
+          console.log("please enter name");
+        } else if (em == ""){
+          console.log("please enter email");
+        } else if (pw == ""){
+          console.log("please enter password");
+        }else{
+          console.log("AJAx RUNNING");
+          mydata = { name: nm, email: em, password: pw};
+                              console.log(mydata);
+          $.ajax({
+          url: "{% url 'crud:save' %}",
+          method: "POST",
+          data: mydata,
+          success:function(data){
+          console.log(data)
+          },
+          });
+        }
+    });
+
+</script>
+
+  </body>
+</html>
